@@ -53,7 +53,7 @@ class App extends React.Component {
       <div>
         <p>{ dogObj ? this.renderDogImage() : loadingElement }</p>
         <button type="button" onClick={this.newDog}>
-          New Dog image
+          New Dog!
         </button>
       </div>
     )
