@@ -8,7 +8,7 @@ class App extends React.Component {
 
     this.state = {
       dogObj: undefined,
-      loading: true,      
+      loading: true,
     };
     this.renderDogImage = this.renderDogImage.bind(this);
     this.newDog = this.newDog.bind(this);
@@ -19,26 +19,29 @@ class App extends React.Component {
     const requestReturn = await fetch('https://dog.ceo/api/breeds/image/random', requestHeaders);
     const requestObject = await requestReturn.json();    
     this.setState({
-      dogObj: requestObject.message,
+      dogObj: requestObject.message.includes('terrier') ? '' : requestObject.message,
     });
   }
 
   newDog() {
     this.fetchDog();
-    console.log('count click');
+    console.log('count click');    
   }
 
   componentDidMount() {
     this.fetchDog();
   }
 
+  componentDidUpdate() {
+    localStorage.setItem('DogURL', this.state.dogObj);
+    this.dogBreed = this.state.dogObj === '' ? 'No Dog to show. Please click the button!' : this.state.dogObj.split("/")[4]; 
+    alert(this.dogBreed);
+  }
+
   renderDogImage() {
     return (
       <div>
-        <img src={this.state.dogObj} id="img-change" alt="dog"/>
-        <button type="button" onClick={this.newDog}>
-          Novo Doguinho!
-        </button>
+        <img src={this.state.dogObj} id="img-change" alt={this.dogBreed}/>        
       </div>
     )
   }
@@ -49,6 +52,9 @@ class App extends React.Component {
     return (
       <div>
         <p>{ dogObj ? this.renderDogImage() : loadingElement }</p>
+        <button type="button" onClick={this.newDog}>
+          New Dog image
+        </button>
       </div>
     )
   }
